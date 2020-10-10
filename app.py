@@ -32,14 +32,6 @@ def get_zoom_link(username):
         return "Your email was not found"
 
 
-# Process message
-# Can be one of:
-    # Username (lastname.firstnameinitial) or email (that@northeastern.edu)
-    #
-    #
-def process_message(message):
-    return
-
 def build_links():
     json_file = open('links.json')
     return json.load(json_file)
