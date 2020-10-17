@@ -1,8 +1,9 @@
 from re import search
 from sys import argv
 from twilio.rest import Client
-import os, event
+import event, os
 from json import load
+
 
 def is_email(txt):
     return not search("[a-z]+[.]{1}[a-z]+@{1}northeastern.edu$", txt) is None
@@ -25,9 +26,9 @@ def get_username(email):
 # Creates the Twilio client using the env variables so
 # sid/token are not on Git
 def create_client():
-    sid = os.environ['TWILIO_ACCOUNT_SID']
+    sid = os.environ["TWILIO_ACCOUNT_SID"]
     token = os.environ['TWILIO_AUTH_TOKEN']
-    client =  Client(sid, token)
+    client = Client(sid, token)
     return client
 
 
