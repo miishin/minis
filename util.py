@@ -1,8 +1,10 @@
 from re import search
-from sys import argv
 from twilio.rest import Client
 import event, os
 from json import load
+import psycopg2
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 
 def is_email(txt):
@@ -26,11 +28,30 @@ def get_username(email):
 # Creates the Twilio client using the env variables so
 # sid/token are not on Git
 def create_client():
-    sid = os.environ["TWILIO_ACCOUNT_SID"]
+    sid = os.environ['TWILIO_ACCOUNT_SID']
     token = os.environ['TWILIO_AUTH_TOKEN']
     client = Client(sid, token)
     return client
 
+"""
+def connect_to_database():
+    DATABASE_URL = os.environ['DATABASE_URL']
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+"""
+
+
+def connect_to_database():
+    engine = create_engine(os.environ['DATABASE_URL'])
+    return scoped_session(sessionmaker(bind=engine))
+
+
+def get_phone_numbers(db):
+    return db.execute("SELECT * FROM phone_numbers")
+
+
+def add_phone_number(db, number):
+    db.execute("INSERT INTO phone_numbers(phone_number) VALUES (" + number + ")")
+    db.commit()
 
 # The phone number of the phone these texts will be sent from
 def my_number():
